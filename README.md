@@ -1,9 +1,23 @@
-# Pure Assembly Programming (x86_64 / NASM / Linux)
+# Pure x86-64 Assembly (NASM / Linux)
 
-Сборник низкоуровневых программ, алгоритмов оптимизации и лабораторных работ, написанных на чистом ассемблере NASM под Linux.
+A collection of low-level x86-64 Assembly (NASM) programs for Linux. This repository demonstrates direct interaction with the CPU, memory, and the System V AMD64 ABI without the use of C standard libraries (libc).
 
-## Что реализовано в репозитории:
-- **String & Memory Operations:** Реализация аналога функции `memset` на низком уровне (`fill_buffer`). Ручное выделение 16-байтового буфера на стеке (`sub rsp, 16`) и аппаратное заполнение памяти через строковые инструкции `rep stosb` с управлением флагом направления `cld`.
-- **Bit Manipulation (Popcount):** Функция подсчета установленных бит в 64-битных регистрах (`count_ones`) через циклический сдвиг `shr` и проверку флага переноса `jnc`.
-- **Архитектурные тесты:** Исследование флагов регистра `RFLAGS` (`Flags.asm`), беззнаковое ветвление (`jb`), трехперандное знаковое умножение `imul` и частичная адресация регистров x86_64.
-- **Стандарты ABI:** Все функции спроектированы в строгом соответствии с соглашением вызовов System V AMD64 ABI (кадр стека через `RBP/RSP`, возвращение результата в `RAX`, сохранение Callee-saved регистров).
+## 📌 Project Context
+These programs were written during my early exploration of low-level programming. Some examples focus purely on register manipulation, CPU flags, and memory operations. 
+
+*Note: Some programs may not use Linux system calls (`syscall`) as they were originally written for educational purposes to understand CPU behavior (using GDB to inspect registers).*
+
+## 🛠️ Implemented Features
+* **String & Memory Operations:** Implementation of `memset` at the hardware level using the `rep stosb` instruction.
+* **Bit Manipulation (Popcount):** A function to count set bits in a 64-bit register using cyclic shifts and checking the Carry Flag (`CF`).
+* **Architecture & Register Tests:** Deep dive into CPU flags (`flags.asm`), register size manipulation (`registers.asm`), and sub-register addressing (`subregs.asm`).
+* **Arithmetic:** Unsigned multiplication (`mul`), division, and basic math operations.
+* **ABI Compliance:** All functions strictly follow the System V AMD64 ABI.
+
+## ⚙️ How to Build and Run
+Ensure you have `nasm` and `ld` installed.
+```bash
+# Example: Compile and run the popcount program
+nasm -f elf64 popcount_bits.asm -o popcount.o
+ld popcount.o -o popcount
+./popcount
